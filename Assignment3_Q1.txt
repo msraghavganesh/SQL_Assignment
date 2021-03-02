@@ -1,3 +1,5 @@
+ASSIGNMENT 3, QUESTION 1!
+
 i) Compute the average price of all products with manufacturer code equal to 2.
 select avg(price) from products where  Manufacturer = 2;
 
