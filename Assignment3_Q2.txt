@@ -1,0 +1,63 @@
+## QUESTION 2 ##
+
+i) Select the number of employees in each department (you only need to show the department code and the number of employees).
+select Department, count(*) from employees group by department;
+
+ii) Select the name and last name of each employee, along with the name and budget of the employee's department.
+select a.name, a.lastname, b.name Department_name, b.Budget
+from employees a join departments b
+on a.department = b.code;
+
+iii) Select the name and last name of employees working for departments with a budget greater than $60,000.
+select name, lastname
+from employees 
+where department in (
+select code from departments where Budget>60000
+);
+
+iv) Select the departments with a budget larger than the average budget of all the departments.
+select *
+from departments 
+where budget > (
+select avg(budget) from departments
+);
+
+v) Select the names of departments with more than two employees.
+SELECT Name FROM Departments
+  WHERE Code IN
+  (
+    SELECT Department
+      FROM Employees
+      GROUP BY Department
+      HAVING COUNT(*) > 2
+  );
+  
+vi) Select the name and last name of employees working for departments with second lowest budget.
+SELECT e.Name, e.LastName
+FROM Employees e 
+WHERE e.Department = (
+       SELECT sub.Code 
+       FROM (SELECT * FROM Departments d ORDER BY d.budget LIMIT 2) sub 
+       ORDER BY budget DESC LIMIT 1);
+       
+vii) Reduce the budget of all departments by 10%.
+update departments 
+set budget = 0.9 * budget;
+
+viii) Reassign all employees from the Research department (code 77) to the IT department (code 14).
+update employees
+set department = 14
+where department = 77;
+
+ix) Add a new department called "Quality Assurance", with a budget of $40,000 and departmental code 11. 
+    Add an employee called "Mary Moore" in that department, with SSN 847-21-9811.
+insert into departments values(11, 'Quality Assurance', 40000);
+insert into employees values(847219811, 'Mary', 'Moore', 11);
+
+x) Delete from the table all employees who work in departments with a budget greater than or equal to $60,000.
+delete from employees
+where department in (
+select code 
+from departments
+where budget>=60000
+);
