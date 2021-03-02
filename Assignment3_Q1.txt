@@ -1,2 +1,54 @@
--- 1.7 Compute the average price of all products with manufacturer code equal to 2.
+i) Compute the average price of all products with manufacturer code equal to 2.
 select avg(price) from products where  Manufacturer = 2;
+
+ii) Compute the number of products with a price larger than or equal to $180.
+select count(*) from products where price>=180;
+
+iii) Select the name and price of all products with a price larger than or equal to $180, and sort first by price (in descending order), and then by name (in ascending order).
+select name, price from products where price>=180 order by price desc, name asc;
+
+iv) select a.*, b.name from products a join Manufacturers b on(a.manufacturer = b.code);
+select a.*, b.name from products a, Manufacturers b where a.manufacturer = b.code;
+
+v) Select the average price of each manufacturer's products, showing only the manufacturer's code.
+SELECT AVG(Price), Manufacturer
+    FROM Products
+GROUP BY Manufacturer;
+
+vi)
+
+vii) Select the names of manufacturer whose products have an average price larger than or equal to $150.
+SELECT AVG(Price), Manufacturers.Name
+   FROM Products, Manufacturers
+   WHERE Products.Manufacturer = Manufacturers.Code
+   GROUP BY Manufacturers.Name
+   HAVING AVG(Price) >= 150;
+   
+viii) Select the name and price of the cheapest product.
+select name, price from Products 
+where price = (
+select min(price)
+from products);
+
+ix)  Select the name of each manufacturer along with the name and price of its most expensive product.
+select max_price_mapping.name as manu_name, max_price_mapping.price, products_with_manu_name.name as product_name
+from 
+    (SELECT Manufacturers.Name, MAX(Price) price
+     FROM Products, Manufacturers
+     WHERE Manufacturer = Manufacturers.Code
+     GROUP BY Manufacturers.Name)
+     as max_price_mapping
+   left join
+     (select products.*, manufacturers.name manu_name
+      from products join manufacturers
+      on (products.manufacturer = manufacturers.code))
+      as products_with_manu_name
+ on
+   (max_price_mapping.name = products_with_manu_name.manu_name
+    and
+    max_price_mapping.price = products_with_manu_name.price); 
+    
+x)    Apply a 10% discount to all products with a price larger than or equal to $120.
+update products
+set price = price * 0.9
+where price >= 120; 
